@@ -30,7 +30,7 @@ export const SidebarRootView = (props: RootProps) => {
 
 		const contactFiles: TFile[] = findContactFiles(contactsFolder);
 
-		parseContactFiles(contactFiles, vault, metadataCache).then((contactsData) =>
+		parseContactFiles(contactFiles, props.plugin).then((contactsData) =>
 			setContacts(contactsData)
 		);
 	}, []);

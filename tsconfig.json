@@ -17,6 +17,10 @@
       "ES5",
       "ES6",
       "ES7"
+    ],
+		"typeRoots": [
+        "./node_modules/@types",
+        "./src/types/",
     ]
   },
   "include": [
