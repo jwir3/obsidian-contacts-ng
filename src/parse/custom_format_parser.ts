@@ -25,11 +25,14 @@ export async function parseContactData(file: TFile, vault: Vault): Promise<Conta
     contactsDict[key] = value;
   }
 
+	console.log("Contacts dict: ", contactsDict);
+
   return {
-    name: contactsDict['Name'],
+    firstName: contactsDict['First Name'],
     lastName: contactsDict['Last Name'],
     phone: contactsDict['Phone'],
-    lastContact: parseDate(contactsDict['Last chat']),
+		email: contactsDict['Email'],
+    lastContact: parseDate(contactsDict['Last Contact']),
     birthday: parseDate(contactsDict['Birthday']),
     file: file,
   }

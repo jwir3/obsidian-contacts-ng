@@ -1,4 +1,4 @@
-import { Plugin } from 'obsidian';
+import { Plugin, FileSystemAdapter } from 'obsidian';
 import { ContactsView } from "src/ui/sidebar/sidebarView";
 import { CONTACTS_VIEW_CONFIG } from "src/util/constants";
 import { ContactsPluginSettings, ContactsSettingTab, DEFAULT_SETTINGS } from './settings/settings';

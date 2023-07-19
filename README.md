@@ -18,7 +18,7 @@ Introducing the [Obsidian](https://obsidian.md/) Contacts Plugin! With this plug
 1. Click the `Install` button to add the plugin.
 1. In the `Community Plugins` menu, enable the `Contacts` plugin.
 
-### Manual 
+### Manual
 1. Download `main.js`, `manifest.json`, and `styles.css` from the latest [release](https://github.com/vbeskrovnov/obsidian-contacts/releases).
 1. Create a directory `obsidian-contacts` in your Obsidian vault plugins directory: `<VaultFolder>/.obsidian/plugins/`. The final path should be `<VaultFolder>/.obsidian/plugins/obsidian-contacts`.
 1. Move the downloaded files (`main.js`, `manifest.json`, and `styles.css`) into the newly created directory.(`<VaultFolder>/.obsidian/plugins/obsidian-contacts`)

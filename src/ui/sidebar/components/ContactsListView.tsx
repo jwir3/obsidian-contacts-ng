@@ -22,7 +22,7 @@ export const ContactsListView = (props: ContactsListProps) => {
 		const sortedContacts = [...contacts].sort((a, b) => {
 			switch (sort) {
 				case Sort.NAME:
-					return (a.name + a.lastName).localeCompare(b.name + b.lastName);
+					return (a.firstName + a.lastName).localeCompare(b.firstName + b.lastName);
 				case Sort.LAST_CONTACT:
 					return compareDatesOrUndefined(a.lastContact, b.lastContact);
 				case Sort.BIRTHDAY:

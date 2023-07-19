@@ -1,10 +1,10 @@
 {
-	"id": "obsidian-contacts",
-	"name": "Contacts",
-	"version": "1.1.0",
+	"id": "obsidian-contacts-ng",
+	"name": "Contacts NextGen",
+	"version": "1.0.0",
 	"minAppVersion": "0.15.0",
-	"description": "Allows you to manage and organize your contacts.",
-	"author": "Vadim Beskrovnov",
-	"authorUrl": "https://github.com/vbeskrovnov",
+	"description": "Allows you to manage and organize your contacts, now with improvements.",
+	"author": "Scott Johnson",
+	"authorUrl": "https://github.com/jwir3",
 	"isDesktopOnly": true
 }

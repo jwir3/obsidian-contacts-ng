@@ -18,11 +18,11 @@ export const ContactView = (props: ContactProps) => {
 		>
 			<div className="content">
 				<div className="name">
-					{contact.name} {contact.lastName}
+					{contact.firstName} {contact.lastName}
 				</div>
 				{contact.lastContact && (
 					<div className="lastContact">
-						Last contact: {diffDateToday(contact.lastContact)} days ago
+						Last Contact: {diffDateToday(contact.lastContact)} days ago
 					</div>
 				)}
 				{contact.birthday && (

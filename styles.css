@@ -26,3 +26,46 @@
 .workspace-leaf-content[data-type='contacts-view'] .view-content {
   padding-top: 0;
 }
+
+/**
+ * Styling for the settings area so that the text area fills the available space.
+ */
+.settingsTemplateRow {
+	display: flex;
+	justify-content: start;
+	flex-direction: column;
+	align-items: flex-start;
+	position: relative;
+}
+
+.settingsTemplateRow .setting-item-control {
+	width: 100%;
+	margin: 1rem 0 0;
+	flex: 1 auto;
+}
+
+.settingsTemplateRow .setting-item-info {
+	flex: 0 1 auto;
+}
+
+.settingsTemplateRow textarea {
+	width: 100%;
+	height: 100%;
+}
+
+.settingsTemplate {
+	display: flex;
+	justify-content: start;
+	flex-direction: column;
+}
+
+.settingsTemplate .settingsTemplateRow {
+	flex: 1 auto;
+}
+
+.settingsTemplateRow .settingsTemplateButton {
+	position: absolute;
+	top: 1rem;
+	right: 0;
+	cursor: pointer;
+}

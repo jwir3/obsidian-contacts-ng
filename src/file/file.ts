@@ -1,8 +1,9 @@
 import { normalizePath, Notice, TFile, TFolder, Vault, Workspace } from "obsidian";
 import { join } from "path";
-import { Template } from "src/settings/settings";
+import { TemplateType } from "src/settings/settings";
+import ContactsPlugin from "src/main";
 
-const customFormat =
+let customFormat: string =
   `/---contact---/
 | key       | value |
 | --------- | ----- |
@@ -45,14 +46,14 @@ export function findContactFiles(contactsFolder: TFolder) {
   return contactFiles;
 }
 
-export function createContactFile(folderPath: string, template: Template, vault: Vault, workspace: Workspace) {
+export function createContactFile(plugin: ContactsPlugin, folderPath: string, templateType: TemplateType, vault: Vault, workspace: Workspace) {
   const folder = vault.getAbstractFileByPath(folderPath)
   if (!folder) {
     new Notice(`Can not find path: '${folderPath}'. Please update "Contacts" plugin settings`);
     return;
   }
 
-  vault.create(normalizePath(join(folderPath, `Contact ${findNextFileNumber(folderPath, vault)}.md`)), getNewFileContent(template))
+  vault.create(normalizePath(join(folderPath, `Contact ${findNextFileNumber(folderPath, vault)}.md`)), getNewFileContent(plugin, templateType))
     .then(createdFile => openFile(createdFile, workspace));
 }
 
@@ -85,11 +86,11 @@ function findNextFileNumber(folderPath: string, vault: Vault) {
   return nextNumber === 0 ? "" : nextNumber.toString();
 }
 
-function getNewFileContent(template: Template): string {
+function getNewFileContent(plugin: ContactsPlugin, template: TemplateType): string {
   switch (template) {
-    case Template.CUSTOM:
-      return customFormat;
-    case Template.FRONTMATTER:
+    case TemplateType.CUSTOM:
+      return plugin.settings.template;
+    case TemplateType.FRONTMATTER:
       return frontmatterFormat;
     default:
       return customFormat;

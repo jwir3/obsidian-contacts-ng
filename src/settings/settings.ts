@@ -1,18 +1,35 @@
-import { App, PluginSettingTab, Setting } from "obsidian";
+import { App, PluginSettingTab, Setting, Plugin } from "obsidian";
 import ContactsPlugin from "src/main";
+
+const defaultTemplate: string =
+`/---contact---/
+| key                   | value      |
+| -------------- | -------- |
+| First Name      |                |
+| Last Name      |                |
+| Email               |                |
+| Phone             |                |
+| LinkedIn          |                |
+| Birthday          |                |
+| Last Contact  |                |
+| Friends           |                 |
+| Tags              | #contacts       |
+/---contact---/`;
 
 export interface ContactsPluginSettings {
   contactsFolder: string;
-  template: Template;
+  template: string,
+	templateType: TemplateType
 }
 
-export enum Template {
+export enum TemplateType {
   CUSTOM = "custom", FRONTMATTER = "frontmatter"
 }
 
 export const DEFAULT_SETTINGS: ContactsPluginSettings = {
   contactsFolder: '/',
-  template: Template.CUSTOM
+	template: defaultTemplate,
+  templateType: TemplateType.CUSTOM
 }
 
 export class ContactsSettingTab extends PluginSettingTab {
@@ -27,6 +44,7 @@ export class ContactsSettingTab extends PluginSettingTab {
     const { containerEl } = this;
 
     containerEl.empty();
+		containerEl.addClass("settingsTemplate");
 
     containerEl.createEl('h2', { text: 'Settings for "Contacts" plugin.' });
 
@@ -40,17 +58,41 @@ export class ContactsSettingTab extends PluginSettingTab {
           this.plugin.settings.contactsFolder = value;
           await this.plugin.saveSettings();
         }));
-
-    new Setting(containerEl)
-      .setName('Contact file template')
-      .setDesc('Template to be used when creating a new contact file')
+		new Setting(containerEl)
+      .setName('Contact Template Type')
+      .setDesc('Template type to be used when creating a new contact file')
       .addDropdown(dropdown => dropdown
-        .addOption(Template.CUSTOM, "Custom")
-        .addOption(Template.FRONTMATTER, "Frontmatter (YAML Metadata)")
-        .setValue(this.plugin.settings.template)
+        .addOption(TemplateType.CUSTOM, "Custom")
+        .addOption(TemplateType.FRONTMATTER, "Frontmatter (YAML Metadata)")
+        .setValue(this.plugin.settings.templateType)
         .onChange(async (value) => {
-          this.plugin.settings.template = value as Template;
+          this.plugin.settings.template = value as TemplateType;
           await this.plugin.saveSettings();
         }));
+		new Setting(containerEl)
+			.setClass("settingsTemplateRow")
+			.setName("Contacts Template")
+			.setDesc(
+				"Template for new contacts. Feel free to add lines. Removing lines will likely result in inconsistencies."
+			)
+			.addButton((btn) =>
+				btn
+					.setButtonText("Reset to Default")
+					.setClass("settingsTemplateButton")
+					.setCta()
+					.onClick(async () => {
+						this.plugin.settings.template = defaultTemplate;
+						await this.plugin.saveSettings();
+						this.display();
+					})
+			)
+			.addTextArea((textArea) => {
+				textArea.setValue(this.plugin.settings.template).onChange(
+					async (value) => {
+						this.plugin.settings.template = value;
+						await this.plugin.saveSettings();
+					}
+				);
+			});
   }
 }

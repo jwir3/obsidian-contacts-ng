@@ -41,8 +41,9 @@ export const SidebarRootView = (props: RootProps) => {
 				onSortChange={setSort}
 				onCreateContact={() =>
 					createContactFile(
+						props.plugin,
 						folder,
-						props.plugin.settings.template,
+						props.plugin.settings.templateType,
 						vault,
 						workspace
 					)
