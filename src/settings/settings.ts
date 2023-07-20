@@ -19,7 +19,8 @@ const defaultTemplate: string =
 export interface ContactsPluginSettings {
   contactsFolder: string;
   template: string,
-	templateType: TemplateType
+	templateType: TemplateType,
+	autoUpdateLastContact: boolean
 }
 
 export enum TemplateType {
@@ -29,7 +30,8 @@ export enum TemplateType {
 export const DEFAULT_SETTINGS: ContactsPluginSettings = {
   contactsFolder: '/',
 	template: defaultTemplate,
-  templateType: TemplateType.CUSTOM
+  templateType: TemplateType.CUSTOM,
+	autoUpdateLastContact: false
 }
 
 export class ContactsSettingTab extends PluginSettingTab {
@@ -46,7 +48,7 @@ export class ContactsSettingTab extends PluginSettingTab {
     containerEl.empty();
 		containerEl.addClass("settingsTemplate");
 
-    containerEl.createEl('h2', { text: 'Settings for "Contacts" plugin.' });
+    containerEl.createEl('h2', { text: 'Settings for "Contacts NextGen" plugin.' });
 
     new Setting(containerEl)
       .setName('Contacts folder location')
@@ -58,6 +60,17 @@ export class ContactsSettingTab extends PluginSettingTab {
           this.plugin.settings.contactsFolder = value;
           await this.plugin.saveSettings();
         }));
+
+		new Setting(containerEl)
+      .setName("Update Last Contact Date")
+      .setDesc("Automatically updates the last contact date based on the creation time of the newest of the pages in the backlinks to this contact.")
+      .addToggle(toggle => toggle.setValue(this.plugin.settings.autoUpdateLastContact)
+        .onChange(async (value) => {
+          this.plugin.settings.autoUpdateLastContact = value;
+					await this.plugin.saveSettings();
+        }
+      )
+    );
 		new Setting(containerEl)
       .setName('Contact Template Type')
       .setDesc('Template type to be used when creating a new contact file')

@@ -6,13 +6,8 @@ import { getLastContactDate } from './parse_utils';
 import ContactsPlugin from '../main';
 
 export async function parseContactFiles(files: TFile[], plugin: ContactsPlugin) {
-	console.log(`plugin IS: `, plugin);
 	const vault = plugin.app.vault;
 	const metadataCache = plugin.app.metadataCache;
-
-	// for (let nextFileIdx in files) {
-	// 	getLastContactDate(files[nextFileIdx], plugin.app);
-	// }
 
   const contactsData: Contact[] = [];
   for (const file of files) {
@@ -23,7 +18,7 @@ export async function parseContactFiles(files: TFile[], plugin: ContactsPlugin) 
       }
       contactsData.push(contact);
     } else if (await isContactFormatFile(file, vault)) {
-      const contact = await parseContactFormatData(file, plugin.app);
+      const contact = await parseContactFormatData(file, plugin);
       if (!contact) {
         continue;
       }

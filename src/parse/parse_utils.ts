@@ -29,16 +29,28 @@ export function getLastContactDate(contactFile: TFile, app: App): Date | undefin
 		let backlinkDates = backlinkFiles.map((x) => {
 			let backlinkAbstractFile = vault.getAbstractFileByPath(x) as TFile;
 			if (backlinkAbstractFile) {
-				return backlinkAbstractFile.stat.mtime;
+				return backlinkAbstractFile.stat.ctime;
 			}
 		});
 
 		sortedBacklinkDates = backlinkDates.sort((a, b) => {
+			if (!b) {
+				b = new Date().getMilliseconds();
+			}
+
+			if (!a) {
+				a = new Date().getMilliseconds();
+			}
+
 			return b - a;
 		});
 	}
 
 	if (sortedBacklinkDates && sortedBacklinkDates.length > 0) {
+		if (!sortedBacklinkDates[0]) {
+			return new Date();
+		}
+
 		return new Date(sortedBacklinkDates[0]);
 	}
 }

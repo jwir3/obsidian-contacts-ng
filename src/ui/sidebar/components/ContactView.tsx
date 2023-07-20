@@ -11,6 +11,14 @@ type ContactProps = {
 export const ContactView = (props: ContactProps) => {
 	const { workspace } = useApp();
 	const contact = props.contact;
+	let lastContactDays, dayPlurality;
+	console.log(`${contact.firstName} ${contact.lastName}: ${contact.lastContact}`);
+
+	if (contact.lastContact) {
+		lastContactDays = diffDateToday(contact.lastContact);
+		dayPlurality = lastContactDays > 1 ? 'days' : 'day';
+	}
+
 	return (
 		<div
 			className="contact-card"
@@ -22,7 +30,7 @@ export const ContactView = (props: ContactProps) => {
 				</div>
 				{contact.lastContact && (
 					<div className="lastContact">
-						Last Contact: {diffDateToday(contact.lastContact)} days ago
+						Last Contact: {lastContactDays} {dayPlurality} ago
 					</div>
 				)}
 				{contact.birthday && (

@@ -1,6 +1,7 @@
 import { App, TFile, Vault } from "obsidian";
 import { Contact } from "./contact";
 import { getLastContactDate, parseDate } from "./parse_utils";
+import ContactsPlugin from "../main";
 
 export async function isContactFile(
   file: TFile, vault: Vault
@@ -9,7 +10,7 @@ export async function isContactFile(
   return (content.match(/\/---contact---\//g) || []).length === 2;
 }
 
-export async function parseContactData(file: TFile, app: App): Promise<Contact | null> {
+export async function parseContactData(file: TFile, plugin: ContactsPlugin): Promise<Contact | null> {
 	const vault = app.vault;
   const fileContents = await vault.cachedRead(file);
   const regexpNames = /^\|(?<key>.+)\|(?<value>.+)\|(\s)*$/gm;
@@ -25,9 +26,13 @@ export async function parseContactData(file: TFile, app: App): Promise<Contact |
     }
     contactsDict[key] = value;
   }
+	console.log(contactsDict['Last Contact']);
 
-	const lastContact = contactsDict['Last Contact'] != null ? parseDate(contactsDict['Last Contact']) : getLastContactDate(file, app);
-	// console.log(`Last contact for ${contactsDict['First Name']} ${contactsDict['Last Name']}: `, lastContact);
+	let lastContact: Date|undefined = parseDate(contactsDict['Last Contact']);
+
+	if (plugin.settings.autoUpdateLastContact) {
+		lastContact = contactsDict['Last Contact'] != null ? parseDate(contactsDict['Last Contact']) : getLastContactDate(file, app);
+	}
 
   return {
     firstName: contactsDict['First Name'],
