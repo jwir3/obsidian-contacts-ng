@@ -20,7 +20,7 @@ export async function parseContactData(file: TFile, metadataCache: MetadataCache
     lastName: frontmatter['name']['last'],
     phone: frontmatter['phone'],
 		email: frontmatter['email'],
-		linkedIn: frontmatter['linkedIn'],
+		linkedIn: frontmatter['linkedin'],
     lastContact: parseDate(frontmatter['last_contact']),
     birthday: parseDate(frontmatter['birthday']),
 		friends: frontmatter['friends'],
