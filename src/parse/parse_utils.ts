@@ -19,9 +19,9 @@ export function getLastContactDate(contactFile: TFile, app: App): Date | undefin
 		return;
 	}
 
-	let metadata = metadataCache.getFileCache(contactFile);
 	let sortedBacklinkDates;
 
+	// @ts-expect-error
 	let backlinks = metadataCache.getBacklinksForFile(contactFile);
 
 	if (backlinks && backlinks.data) {

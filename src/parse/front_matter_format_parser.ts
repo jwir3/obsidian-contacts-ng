@@ -16,11 +16,15 @@ export async function parseContactData(file: TFile, metadataCache: MetadataCache
   }
 
   return {
-    name: frontmatter['name']['first'],
+    firstName: frontmatter['name']['first'],
     lastName: frontmatter['name']['last'],
     phone: frontmatter['phone'],
-    lastContact: parseDate(frontmatter['last_chat']),
+		email: frontmatter['email'],
+		linkedIn: frontmatter['linkedIn'],
+    lastContact: parseDate(frontmatter['last_contact']),
     birthday: parseDate(frontmatter['birthday']),
+		friends: frontmatter['friends'],
+		tags: frontmatter['tags'],
     file: file,
   }
 }

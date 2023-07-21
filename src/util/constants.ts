@@ -1,6 +1,6 @@
 export const CONTACTS_VIEW_CONFIG = {
-	type: "contacts-view",
-	name: "Contacts",
+	type: "contacts-ng-view",
+	name: "Contacts NextGen",
 	icon: "contact",
 };
 

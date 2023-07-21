@@ -2,35 +2,29 @@ import { App, PluginSettingTab, Setting, Plugin } from "obsidian";
 import ContactsPlugin from "src/main";
 
 const defaultTemplate: string =
-`/---contact---/
-| key                   | value      |
-| -------------- | -------- |
-| First Name      |                |
-| Last Name      |                |
-| Email               |                |
-| Phone             |                |
-| LinkedIn          |                |
-| Birthday          |                |
-| Last Contact  |                |
-| Friends           |                 |
-| Tags              | #contacts       |
-/---contact---/`;
+`---
+name:
+  first:
+  last:
+phone:
+email:
+linkedin: linkedin.com/in/
+birthday: YYYY-MM-DD
+last_contact: YYYY-MM-DD
+friends: ""
+tags: ""
+type: contact
+---`;
 
 export interface ContactsPluginSettings {
   contactsFolder: string;
   template: string,
-	templateType: TemplateType,
 	autoUpdateLastContact: boolean
-}
-
-export enum TemplateType {
-  CUSTOM = "custom", FRONTMATTER = "frontmatter"
 }
 
 export const DEFAULT_SETTINGS: ContactsPluginSettings = {
   contactsFolder: '/',
 	template: defaultTemplate,
-  templateType: TemplateType.CUSTOM,
 	autoUpdateLastContact: false
 }
 
@@ -71,17 +65,6 @@ export class ContactsSettingTab extends PluginSettingTab {
         }
       )
     );
-		new Setting(containerEl)
-      .setName('Contact Template Type')
-      .setDesc('Template type to be used when creating a new contact file')
-      .addDropdown(dropdown => dropdown
-        .addOption(TemplateType.CUSTOM, "Custom")
-        .addOption(TemplateType.FRONTMATTER, "Frontmatter (YAML Metadata)")
-        .setValue(this.plugin.settings.templateType)
-        .onChange(async (value) => {
-          this.plugin.settings.template = value as TemplateType;
-          await this.plugin.saveSettings();
-        }));
 		new Setting(containerEl)
 			.setClass("settingsTemplateRow")
 			.setName("Contacts Template")

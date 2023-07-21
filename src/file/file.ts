@@ -1,35 +1,6 @@
 import { normalizePath, Notice, TFile, TFolder, Vault, Workspace } from "obsidian";
 import { join } from "path";
-import { TemplateType } from "src/settings/settings";
 import ContactsPlugin from "src/main";
-
-let customFormat: string =
-  `/---contact---/
-| key       | value |
-| --------- | ----- |
-| Name      |       |
-| Last Name |       |
-| Phone     |       |
-| Telegram  |       |
-| Linkedin  |       |
-| Birthday  |       |
-| Last chat |       |
-| Friends   |       |
-/---contact---/`
-
-const frontmatterFormat =
-  `---
-name:
-  first:
-  last:
-phone:
-telegram:
-linkedin:
-birthday:
-last_chat:
-friends:
-type: contact
----`
 
 export async function openFile(file: TFile, workspace: Workspace) {
   const leaf = workspace.getLeaf()
@@ -46,14 +17,14 @@ export function findContactFiles(contactsFolder: TFolder) {
   return contactFiles;
 }
 
-export function createContactFile(plugin: ContactsPlugin, folderPath: string, templateType: TemplateType, vault: Vault, workspace: Workspace) {
+export function createContactFile(plugin: ContactsPlugin, folderPath: string, vault: Vault, workspace: Workspace) {
   const folder = vault.getAbstractFileByPath(folderPath)
   if (!folder) {
-    new Notice(`Can not find path: '${folderPath}'. Please update "Contacts" plugin settings`);
+    new Notice(`Can not find path: '${folderPath}'. Please update "Contacts NextGen" plugin settings`);
     return;
   }
 
-  vault.create(normalizePath(join(folderPath, `Contact ${findNextFileNumber(folderPath, vault)}.md`)), getNewFileContent(plugin, templateType))
+  vault.create(normalizePath(join(folderPath, `Contact ${findNextFileNumber(folderPath, vault)}.md`)), getNewFileContent(plugin))
     .then(createdFile => openFile(createdFile, workspace));
 }
 
@@ -86,13 +57,6 @@ function findNextFileNumber(folderPath: string, vault: Vault) {
   return nextNumber === 0 ? "" : nextNumber.toString();
 }
 
-function getNewFileContent(plugin: ContactsPlugin, template: TemplateType): string {
-  switch (template) {
-    case TemplateType.CUSTOM:
-      return plugin.settings.template;
-    case TemplateType.FRONTMATTER:
-      return frontmatterFormat;
-    default:
-      return customFormat;
-  }
+function getNewFileContent(plugin: ContactsPlugin): string {
+	return plugin.settings.template;
 }
