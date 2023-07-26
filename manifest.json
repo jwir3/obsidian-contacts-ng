@@ -1,7 +1,7 @@
 {
-	"id": "obsidian-contacts-ng",
+	"id": "contacts-ng",
 	"name": "Contacts NextGen",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"minAppVersion": "0.15.0",
 	"description": "Allows you to manage and organize your contacts, now with improvements.",
 	"author": "Scott Johnson",
