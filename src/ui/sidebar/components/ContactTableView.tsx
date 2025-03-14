@@ -10,70 +10,69 @@ export class ContactTableView extends MarkdownRenderChild {
 		this.contact = contact;
 	}
 
-	onload() {
+	async onload() {
 		let doc = this.containerEl.ownerDocument;
 		let table = doc.createElement('table');
 		let markdownFriends: HTMLElement = doc.createElement('div');
-		MarkdownRenderer.renderMarkdown(this.contact.friends || " ", markdownFriends, this.contact.file.path, this)
-			.then(() => {
-				let markdownTags: HTMLElement = doc.createElement("div");
-				MarkdownRenderer.renderMarkdown(this.contact.tags || " ", markdownTags, this.contact.file.path, this)
-					.then(() => {
-						table.addClass('contacts-ng-contact-reading-view');
-						table.innerHTML = `
-							<tr>
-								<th>First Name</th><td>${this.contact.firstName || " "}</td>
-							</tr>
-							<tr>
-								<th>Last Name</th><td>${this.contact.lastName || " "}</td>
-							</tr>
-							<tr>
-								<th>Phone</th><td>${this.contact.phone || " "}</td>
-							</tr>
-							<tr>
-								<th>Email</th><td>${this.contact.email || " " }</td>
-							</tr>
-							<tr>
-								<th>LinkedIn</th><td>${this.contact.linkedIn || " "}</td>
-							</tr>
-							<tr>
-								<th>Last Contact</th><td>${this.contact.lastContact || "Unknown"}</td>
-							</tr>
-							<tr>
-								<th>Birthday</th><td>${this.contact.birthday || " "}</td>
-							</tr>
-							<tr>
-								<th>Friends</th><td>${markdownFriends.innerHTML || " "}</td>
-							</tr>
-							<tr>
-								<th>Tags</th><td>${markdownTags.innerHTML || " "}</td>
-							</tr>
-						`;
-						this.containerEl.parentElement!.appendChild(table);
-					});
-			});
+		await MarkdownRenderer.renderMarkdown(this.contact.friends || " ", markdownFriends, this.contact.file.path, this);
+		let markdownTags: HTMLElement = doc.createElement("div");
+		await MarkdownRenderer.renderMarkdown(this.contact.tags || " ", markdownTags, this.contact.file.path, this);
+		table.addClass('contacts-ng-contact-reading-view');
+		for (let row of [{
+			label: "First Name",
+			value: this.contact.firstName || ""
+		},
+		{
+			label: "Last Name",
+			value: this.contact.lastName || ""
+		},
+		{
+			label: "Phone",
+			value: this.contact.phone || ""
+		},
+		{
+			label: "Email",
+			value: this.contact.email || ""
+		},
+		{
+			label: "LinkedIn",
+			value: this.contact.linkedIn || ""
+		},
+		{
+			label: "Github",
+			value: this.contact.github || ""
+		},
+		{
+			label: "Last Contact",
+			value: this.contact.lastContact || "Unknown"
+		},
+		{
+			label: "Birthday",
+			value: this.contact.birthday || ""
+		},
+		{
+			label: "Friends",
+			value: markdownFriends || ""
+		},
+		{
+			label: "Tags",
+			value: markdownTags || ""
+		}
+	]) {
+		let rowEl = doc.createElement('tr');
+		let labelEl = doc.createElement('th');
+		labelEl.textContent = row.label;
+		let valueEl = doc.createElement('td');
+
+		if (row.value instanceof HTMLElement) {
+			valueEl.appendChild(row.value);
+		} else {
+			valueEl.innerText = `${row.value}`;
+		}
+		rowEl.appendChild(labelEl);
+		rowEl.appendChild(valueEl);
+		table.appendChild(rowEl);
+	}
+		this.containerEl.parentElement!.appendChild(table);
 	}
 }
-
-// export class Emoji extends MarkdownRenderChild {
-//   static ALL_EMOJIS: Record<string, string> = {
-//     ":+1:": "👍",
-//     ":sunglasses:": "😎",
-//     ":smile:": "😄",
-//   };
-
-//   text: string;
-
-//   constructor(containerEl: HTMLElement, text: string) {
-//     super(containerEl);
-
-//     this.text = text;
-//   }
-
-//   onload() {
-//     const emojiEl = this.containerEl.createSpan({
-//       text: Emoji.ALL_EMOJIS[this.text] ?? this.text,
-//     });
-//     this.containerEl.replaceWith(emojiEl);
-//   }
-// }

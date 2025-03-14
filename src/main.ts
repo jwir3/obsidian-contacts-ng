@@ -23,12 +23,12 @@ export default class ContactsPlugin extends Plugin {
 
 		this.addSettingTab(new ContactsSettingTab(this.app, this));
 
-    this.registerMarkdownPostProcessor((element, context) => {
+		this.registerMarkdownPostProcessor((element, context) => {
 			if (context.frontmatter && context.frontmatter.type == 'contact') {
 				let contactFile: TFile = this.app.vault.getAbstractFileByPath(context.sourcePath) as TFile;
 				let frontmatterContainers = element.getElementsByClassName('frontmatter-container');
 				if (frontmatterContainers && frontmatterContainers.length > 0) {
-					let contactProm: Promise<Contact|null> = parseContactData(contactFile, this.app.metadataCache);
+					let contactProm: Promise<Contact | null> = parseContactData(contactFile, this.app.metadataCache);
 					contactProm.then((value: Contact | null) => {
 						if (value != null) {
 							let fmcLength = frontmatterContainers.length;
@@ -40,11 +40,10 @@ export default class ContactsPlugin extends Plugin {
 					});
 				}
 			}
-    });
+		});
 	}
 
 	onunload() {
-		this.app.workspace.detachLeavesOfType(CONTACTS_VIEW_CONFIG.type);
 	}
 
 	async loadSettings() {
