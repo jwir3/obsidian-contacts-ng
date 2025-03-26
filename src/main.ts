@@ -25,19 +25,22 @@ export default class ContactsPlugin extends Plugin {
 
 		this.registerMarkdownPostProcessor((element, context) => {
 			if (context.frontmatter && context.frontmatter.type == 'contact') {
-				let contactFile: TFile = this.app.vault.getAbstractFileByPath(context.sourcePath) as TFile;
-				let frontmatterContainers = element.getElementsByClassName('frontmatter-container');
-				if (frontmatterContainers && frontmatterContainers.length > 0) {
-					let contactProm: Promise<Contact | null> = parseContactData(contactFile, this.app.metadataCache);
-					contactProm.then((value: Contact | null) => {
-						if (value != null) {
-							let fmcLength = frontmatterContainers.length;
-							let lastContainer = frontmatterContainers.item(fmcLength - 1);
-							context.addChild(new ContactTableView(lastContainer as HTMLElement, value));
-						} else {
-							console.warn(`Contact was not retrievable from source path: ${context.sourcePath}`);
-						}
-					});
+				let contactAbstractFile = this.app.vault.getAbstractFileByPath(context.sourcePath);
+				if (contactAbstractFile instanceof TFile) {
+					let contactFile: TFile = contactAbstractFile;
+					let frontmatterContainers = element.getElementsByClassName('frontmatter-container');
+					if (frontmatterContainers && frontmatterContainers.length > 0) {
+						let contactProm: Promise<Contact | null> = parseContactData(contactFile, this.app.metadataCache);
+						contactProm.then((value: Contact | null) => {
+							if (value != null) {
+								let fmcLength = frontmatterContainers.length;
+								let lastContainer = frontmatterContainers.item(fmcLength - 1);
+								context.addChild(new ContactTableView(lastContainer as HTMLElement, value));
+							} else {
+								console.warn(`Contact was not retrievable from source path: ${context.sourcePath}`);
+							}
+						});
+					}
 				}
 			}
 		});

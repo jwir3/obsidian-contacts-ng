@@ -29,32 +29,32 @@ export async function createContactFile(plugin: ContactsPlugin, folderPath: stri
 }
 
 function findNextFileNumber(folderPath: string, vault: Vault) {
-	const folder = vault.getAbstractFileByPath(
-		normalizePath(folderPath)
-	) as TFolder;
-
-	let nextNumber = 0;
-	Vault.recurseChildren(folder, (contactNote) => {
-		if (!(contactNote instanceof TFile)) {
-			return;
-		}
-		const name = contactNote.basename;
-		const regex = /Contact(?<number>\s\d+)*/g;
-		for (const match of name.matchAll(regex)) {
-			if (!match.groups || !match.groups.number) {
-				if (nextNumber === 0) {
-					nextNumber = 1;
+	const abstractFolder = vault.getAbstractFileByPath(normalizePath(folderPath));
+	if (abstractFolder instanceof TFolder) {
+		const folder: TFolder = abstractFolder;
+		let nextNumber = 0;
+		Vault.recurseChildren(folder, (contactNote) => {
+			if (!(contactNote instanceof TFile)) {
+				return;
+			}
+			const name = contactNote.basename;
+			const regex = /Contact(?<number>\s\d+)*/g;
+			for (const match of name.matchAll(regex)) {
+				if (!match.groups || !match.groups.number) {
+					if (nextNumber === 0) {
+						nextNumber = 1;
+					}
+					continue;
 				}
-				continue;
+				const currentNumberString = match.groups.number.trim();
+				if (currentNumberString != undefined && currentNumberString !== "") {
+					const currentNumber = parseInt(currentNumberString);
+					nextNumber = Math.max(nextNumber, (currentNumber + 1));
+				}
 			}
-			const currentNumberString = match.groups.number.trim();
-			if (currentNumberString != undefined && currentNumberString !== "") {
-				const currentNumber = parseInt(currentNumberString);
-				nextNumber = Math.max(nextNumber, (currentNumber + 1));
-			}
-		}
-	});
-	return nextNumber === 0 ? "" : nextNumber.toString();
+		});
+		return nextNumber === 0 ? "" : nextNumber.toString();
+	}
 }
 
 function getNewFileContent(plugin: ContactsPlugin): string {

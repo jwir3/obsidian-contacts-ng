@@ -1,7 +1,7 @@
 {
 	"id": "contacts-ng",
 	"name": "Contacts NextGen",
-	"version": "1.0.2",
+	"version": "1.0.3",
 	"minAppVersion": "0.15.0",
 	"description": "Allows you to manage and organize your contacts, now with improvements.",
 	"author": "Scott Johnson and Vadim Beskrovnov",

@@ -1,14 +1,14 @@
 import { App, TFile, MetadataCache, Vault } from 'obsidian';
 
 export function parseDate(value: string): Date | undefined {
-  if (!value) {
-    return undefined;
-  }
-  const parsedDate = value.match(/(\[\[)?(?<date>[0-9-]+)(\]\])?/)
-  if (!parsedDate || !parsedDate.groups) {
-    return undefined;
-  }
-  return new Date(parsedDate.groups['date']);
+	if (!value) {
+		return undefined;
+	}
+	const parsedDate = value.match(/(\[\[)?(?<date>[0-9-]+)(\]\])?/)
+	if (!parsedDate || !parsedDate.groups) {
+		return undefined;
+	}
+	return new Date(parsedDate.groups['date']);
 }
 
 export function getLastContactDate(contactFile: TFile, app: App): Date | undefined {
@@ -27,9 +27,9 @@ export function getLastContactDate(contactFile: TFile, app: App): Date | undefin
 	if (backlinks && backlinks.data) {
 		let backlinkFiles = Object.keys(backlinks.data);
 		let backlinkDates = backlinkFiles.map((x) => {
-			let backlinkAbstractFile = vault.getAbstractFileByPath(x) as TFile;
-			if (backlinkAbstractFile) {
-				return backlinkAbstractFile.stat.ctime;
+			let abstractFile = vault.getAbstractFileByPath(x);
+			if (abstractFile instanceof TFile) {
+				return abstractFile.stat.ctime;
 			}
 		});
 

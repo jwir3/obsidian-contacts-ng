@@ -20,19 +20,17 @@ export const SidebarRootView = (props: RootProps) => {
 	const folder = props.plugin.settings.contactsFolder;
 
 	React.useEffect(() => {
-		const contactsFolder = vault.getAbstractFileByPath(
-			normalizePath(folder)
-		) as TFolder;
+		const abstractContactsFolder = vault.getAbstractFileByPath(normalizePath(folder));
+		let contactsFolder: TFolder;
+		if (abstractContactsFolder instanceof TFolder) {
+			contactsFolder = abstractContactsFolder;
+			const contactFiles: TFile[] = findContactFiles(contactsFolder);
+			parseContactFiles(contactFiles, props.plugin).then((contactsData) => setContacts(contactsData)
+		);
 
-		if (!contactsFolder) {
+		} else {
 			setContacts([]);
 		}
-
-		const contactFiles: TFile[] = findContactFiles(contactsFolder);
-
-		parseContactFiles(contactFiles, props.plugin).then((contactsData) =>
-			setContacts(contactsData)
-		);
 	}, []);
 
 	return (
